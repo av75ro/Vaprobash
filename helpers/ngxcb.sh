@@ -63,7 +63,7 @@ read -d '' PHP_NO_SSL <<EOF
             root /usr/share/;
             index index.php index.html index.htm;
             location ~ ^/phpmyadmin/(.+\.php)$ {
-                try_files $uri =404;
+                try_files \$uri =404;
                 root /usr/share/;
                 fastcgi_pass 127.0.0.1:9000;
                 fastcgi_index index.php;
