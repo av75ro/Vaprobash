@@ -58,6 +58,27 @@ read -d '' PHP_NO_SSL <<EOF
             fastcgi_param LARA_ENV local; # Environment variable for Laravel
             fastcgi_param HTTPS off;
         }
+        
+        location /phpmyadmin {
+            root /usr/share/;
+            index index.php index.html index.htm;
+            location ~ ^/phpmyadmin/(.+\.php)$ {
+                try_files $uri =404;
+                root /usr/share/;
+                fastcgi_pass 127.0.0.1:9000;
+                fastcgi_index index.php;
+                include fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+                fastcgi_param LARA_ENV local; # Environment variable for Laravel
+                fastcgi_param HTTPS off;
+            }
+        location ~* ^/phpmyadmin/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {
+            root /usr/share/;
+        }
+    }
+    location /phpMyAdmin {
+        rewrite ^/* /phpmyadmin last;
+    }
 EOF
 
 # Nginx Server Block config for PHP (with SSL)
